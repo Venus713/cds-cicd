@@ -1,0 +1,84 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: The AWS CloudFormation template for creating resources such as s3 Bucket for web hosting
+
+Parameters:
+  WebHostingBucketName:
+    Description : Bucket name for web Hosting
+    Type: String
+    Default: gxp-dev.centreum.com
+    ConstraintDescription: Must be a valid s3 bucket name
+    AllowedValues:
+      - gxp.centreum.com
+      - gxp-dev.centreum.com
+  DatasetBucketName:
+    Description : Bucket name for Dataset
+    Type: String
+    Default: gxpvalidator-dataset-dev
+    ConstraintDescription: Must be a valid s3 bucket name
+    AllowedValues:
+      - gxpvalidator-dataset
+      - gxpvalidator-dataset-dev
+
+Resources:
+  WebHostingS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref WebHostingBucketName
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: index.html
+  WebsiteCDN:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Comment: CDN for S3-backed website
+        Aliases:
+        - !Ref WebHostingBucketName
+        Enabled: 'true'
+        DefaultCacheBehavior:
+          ForwardedValues:
+            QueryString: 'true'
+          TargetOriginId: only-origin
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        ViewerCertificate:
+          AcmCertificateArn: arn:aws:acm:us-east-1:534732747354:certificate/ff1b70e0-2ff2-44ce-b967-375a4ad27d8c
+          MinimumProtocolVersion: TLSv1_2016
+          SSLSupportMethod: sni-only
+        Origins:
+          -
+            DomainName: !Join ['', [!Ref 'WebHostingBucketName', .s3-website-us-east-1.amazonaws.com]]
+            Id: only-origin
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+  DatasetBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref DatasetBucketName
+      CorsConfiguration:
+        CorsRules:
+          -
+            AllowedHeaders:
+              - '*'
+            AllowedMethods:
+              - GET
+              - HEAD
+              - PUT
+              - POST
+              - DELETE
+            AllowedOrigins:
+              - '*'
+            ExposedHeaders: 
+              - "x-amz-server-side-encryption"
+              - "x-amz-request-id"
+              - "x-amz-id-2"
+              - "ETag"
+            MaxAge: 3000
+
+
+Outputs:
+  WebsiteURL:
+    Value: !GetAtt WebHostingS3Bucket.WebsiteURL
+    Description: URL for website hosted on S3
