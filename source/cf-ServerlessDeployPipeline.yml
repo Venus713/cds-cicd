@@ -21,9 +21,9 @@ Parameters:
   ProjectName:
     Description: The name identifying this project.
     Type: String
-    Default: gxpvalidator
+    Default: cdsvalidator
     AllowedValues:
-      - gxpvalidator
+      - cdsvalidator
   # Account Id of the deployment target.
   DevAccountID:
     Description : Dev Account ID of the target account where the deployment will happen.
@@ -51,21 +51,21 @@ Parameters:
   DevWebHostingS3BucketName:
     Type: String
     Description: s3 bucket name for the web APP in dev server
-    Default: gxp-dev.centreum.com
+    Default: cds-dev.centreum.com
     AllowedValues:
-      - gxp-dev.centreum.com
+      - cds-dev.centreum.com
   DevDatabaseSecretName:
     Type: String
     Description: secret manager name for database in dev
-    Default: gpx-rds
+    Default: cds-rds
     AllowedValues:
-      - gpx-rds
+      - cds-rds
   DevDatasetBucketName:
     Type: String
     Description: secret manager name for database in dev
-    Default: gxpvalidator-dataset-dev
+    Default: cdsvalidator-dataset-dev
     AllowedValues:
-      - gxpvalidator-dataset-dev
+      - cdsvalidator-dataset-dev
   ProdDeploymentEnvironment:
     Type: String
     Description: Select name of the environment to which the pipeline is deploying.
@@ -75,9 +75,9 @@ Parameters:
   ProdWebHostingS3BucketName:
     Type: String
     Description: s3 bucket name for the web APP in production server
-    Default: gxp.centreum.com
+    Default: cds.centreum.com
     AllowedValues:
-      - gxp.centreum.com
+      - cds.centreum.com
   ProdCloudFrontDistributionID:
     Type: String
     Description: Please be sure that you already created an S3 WebHosting Bucket and a CloudFront distribution
@@ -86,25 +86,25 @@ Parameters:
   ProdDatabaseSecretName:
     Type: String
     Description: secret manager name for database in dev
-    Default: gxp-rds
+    Default: cds-rds
     AllowedValues:
-      - gxp-rds
+      - cds-rds
   ProdDatasetBucketName:
     Type: String
     Description: secret manager name for database in dev
-    Default: gxpvalidator-dataset
+    Default: cdsvalidator-dataset
     AllowedValues:
-      - gxpvalidator-dataset
-      - gxpvalidator-dataset
+      - cdsvalidator-dataset
+      - cdsvalidator-dataset
   DeploymentConfigBucketName:
     Description: S3 bucket name to be used as configuration storage
     Type: String
-    Default: gxp-deploy-configuration
+    Default: cds-deploy-configuration
   # Cross Account Role to be assumed by code pipeline to carry out deployment
   CodePipelineAssumeRoleName:
     Type: String
     Description: Cross Account Role to be assumed by code pipeline to carry out deployment
-    Default: cross-account-role-gxp
+    Default: cross-account-role-cds
   # Cloudformation Service Role to create serverless resources
   CFExecutionRoleName:
     Type: String
@@ -114,11 +114,11 @@ Parameters:
   BackendRepoName:
     Type: String
     Description: Enter the name of code commit repo.
-    Default: gxp-backend
+    Default: cds-backend
   FrontendRepoName:
     Type: String
     Description: Enter the name of repo for React Web Application
-    Default: gxp-frontend
+    Default: cds-frontend
   # Source Code Branch for pipeline
   CodeCommitRepoBranch:
     Type: String
@@ -197,7 +197,7 @@ Resources:
         - Key: category
           Value: goldmine
         - Key: project_name
-          Value: gxpvalidator
+          Value: cdsvalidator
 
   CodeDeployFrontendToProduction:
     Type: AWS::CodeBuild::Project
@@ -249,7 +249,7 @@ Resources:
         - Key: category
           Value: goldmine
         - Key: project_name
-          Value: gxpvalidator
+          Value: cdsvalidator
 
   FrontendCodePipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -392,7 +392,7 @@ Resources:
         - Key: category
           Value: goldmine
         - Key: project_name
-          Value: gxpvalidator
+          Value: cdsvalidator
   CodeDeployBackendToProd:
     Type: AWS::CodeBuild::Project
     Properties:
@@ -439,7 +439,7 @@ Resources:
         - Key: category
           Value: goldmine
         - Key: project_name
-          Value: gxpvalidator
+          Value: cdsvalidator
 
   BackendCodePipeline:
     Type: AWS::CodePipeline::Pipeline
@@ -575,18 +575,18 @@ Resources:
         - Key: category
           Value: goldmine
         - Key: project_name
-          Value: gxpvalidator
+          Value: cdsvalidator
 
   CodePipelineKMSAlias:
     Type: AWS::KMS::Alias
     Properties:
-      AliasName: !Sub alias/gxp-codepipeline-key
+      AliasName: !Sub alias/cds-codepipeline-key
       TargetKeyId: !GetAtt CodePipelineKMSKey.Arn
 
   CodePipelineS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'gxp-codepipeline-bucket-${AWS::Region}-${AWS::AccountId}'
+      BucketName: !Sub 'cds-codepipeline-bucket-${AWS::Region}-${AWS::AccountId}'
       AccessControl: Private
       LifecycleConfiguration:
         Rules:
@@ -606,7 +606,7 @@ Resources:
         - Key: category
           Value: goldmine
         - Key: project_name
-          Value: gxpvalidator
+          Value: cdsvalidator
 
   CodePipelineS3BucketPolicy:
     Type: AWS::S3::BucketPolicy

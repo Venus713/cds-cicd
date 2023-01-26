@@ -6,7 +6,7 @@ Parameters:
   ProjectName:
     Description: Identifier of project/stack
     Type: String
-    Default: gxp
+    Default: cds
   environmentName:
     Description: Environment Name
     Type: String

@@ -6,19 +6,19 @@ Parameters:
   WebHostingBucketName:
     Description : Bucket name for web Hosting
     Type: String
-    Default: gxp-dev.centreum.com
+    Default: cds-dev.centreum.com
     ConstraintDescription: Must be a valid s3 bucket name
     AllowedValues:
-      - gxp.centreum.com
-      - gxp-dev.centreum.com
+      - cds.centreum.com
+      - cds-dev.centreum.com
   DatasetBucketName:
     Description : Bucket name for Dataset
     Type: String
-    Default: gxpvalidator-dataset-dev
+    Default: cdsvalidator-dataset-dev
     ConstraintDescription: Must be a valid s3 bucket name
     AllowedValues:
-      - gxpvalidator-dataset
-      - gxpvalidator-dataset-dev
+      - cdsvalidator-dataset
+      - cdsvalidator-dataset-dev
 
 Resources:
   WebHostingS3Bucket:

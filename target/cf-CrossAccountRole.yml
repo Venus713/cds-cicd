@@ -6,7 +6,7 @@ Parameters:
   ProjectName:
     Description: Please give the project name. This will be used all across the stack as identifier.
     Type: String
-    Default: gxp
+    Default: cds
   ToolsAccountID:
     Description : Account ID of the TOOLS AWS Account that initiates code deployment to this account.
     Type: String
@@ -18,7 +18,7 @@ Parameters:
   DatabaseSecretName:
     Description: Secret name for the postgresql db credentials. Please be sure that you created postgresql already and saved the credentials as the given secret
     Type: String
-    Default: gxp-rds
+    Default: cds-rds
 
 Resources:
   CrossAccountDeploymentRole:
@@ -116,7 +116,19 @@ Resources:
               - secretsmanager:GetSecretValue
               - secretsmanager:DescribeSecret
             Resource:
-              - !Join [':', ['arn:aws:secretsmanager:::secret', !Ref DatabaseSecretName]]
+              - !Join [':', ['arn:aws:secretsmanager:${AWS::Region}::secret', !Ref DatabaseSecretName]]
+          - Sid: RDSAccess
+            Effect: Allow
+            Action:
+              - rds:*
+            Resource:
+              - '*'
+          - Sid: EC2Access
+            Effect: Allow
+            Action:
+              - ec2:*
+            Resource:
+              - '*'
 
 
 Outputs:
