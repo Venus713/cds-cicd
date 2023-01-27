@@ -60,12 +60,6 @@ Parameters:
     Default: cds-rds
     AllowedValues:
       - cds-rds
-  DevDatasetBucketName:
-    Type: String
-    Description: secret manager name for database in dev
-    Default: cdsvalidator-dataset-dev
-    AllowedValues:
-      - cdsvalidator-dataset-dev
   ProdDeploymentEnvironment:
     Type: String
     Description: Select name of the environment to which the pipeline is deploying.
@@ -89,13 +83,6 @@ Parameters:
     Default: cds-rds
     AllowedValues:
       - cds-rds
-  ProdDatasetBucketName:
-    Type: String
-    Description: secret manager name for database in dev
-    Default: cdsvalidator-dataset
-    AllowedValues:
-      - cdsvalidator-dataset
-      - cdsvalidator-dataset
   DeploymentConfigBucketName:
     Description: S3 bucket name to be used as configuration storage
     Type: String
@@ -189,10 +176,6 @@ Resources:
             Name: WEB_HOSTING_BUCKET
             Type: PLAINTEXT
             Value: !Ref DevWebHostingS3BucketName
-          -
-            Name: DATASET_BUCKET
-            Type: PLAINTEXT
-            Value: !Ref DevDatasetBucketName
       Tags:
         - Key: category
           Value: goldmine
@@ -241,10 +224,6 @@ Resources:
             Name: CLOUD_FRONT_DISTRIBUTION_ID
             Type: PLAINTEXT
             Value: !Ref ProdCloudFrontDistributionID
-          -
-            Name: DATASET_BUCKET
-            Type: PLAINTEXT
-            Value: !Ref ProdDatasetBucketName
       Tags:
         - Key: category
           Value: goldmine
@@ -384,10 +363,6 @@ Resources:
             Name: DB_SECRET_NAME
             Type: PLAINTEXT
             Value: !Ref DevDatabaseSecretName
-          -
-            Name: DATASET_BUCKET
-            Type: PLAINTEXT
-            Value: !Ref DevDatasetBucketName
       Tags:
         - Key: category
           Value: goldmine
@@ -431,10 +406,6 @@ Resources:
             Name: DB_SECRET_NAME
             Type: PLAINTEXT
             Value: !Ref ProdDatabaseSecretName
-          -
-            Name: DATASET_BUCKET
-            Type: PLAINTEXT
-            Value: !Ref ProdDatasetBucketName
       Tags:
         - Key: category
           Value: goldmine
